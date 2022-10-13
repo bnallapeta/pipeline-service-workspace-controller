@@ -16,6 +16,7 @@ Here is a  ~5 minutes demo  of the operator.
 
 ### Building the image
 
+*Note: This step is optional and needs to be run only if you have custom changes in the code.*
 Build and push your image to the location specified by `IMG`:
 
 ```sh
@@ -28,8 +29,10 @@ The parameter specifying the workspace where the APIExport is located needs to b
  
 Deploy the operator to kcp with the image specified by `IMG`:
 
+*Note: IMG defaults to quay.io/redhat-pipeline-service/settings-operator:latest. If you did not build a custom image in the previous step, you can skip the IMG parameter.*
+
 ```sh
-make deploy IMG=<some-registry>/settings-operator:tag
+KUBECONFIG=path/to/kcp.kubeconfig make deploy IMG=<some-registry>/settings-operator:tag
 ```
 
 ### Uninstalling resources
@@ -37,7 +40,7 @@ make deploy IMG=<some-registry>/settings-operator:tag
 To delete the resources from kcp:
 
 ```sh
-make uninstall
+KUBECONFIG=path/to/kcp.kubeconfig make uninstall
 ```
 
 ### Undeploying the operator
@@ -45,7 +48,7 @@ make uninstall
 Undeploy the operator from kcp:
 
 ```sh
-make undeploy
+KUBECONFIG=path/to/kcp.kubeconfig make undeploy
 ```
 
 ## Contributing
@@ -54,7 +57,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ### How it works
 
-This project aims to follow the Kubernetes [Operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/)
+This project aims to follow the Kubernetes [Operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/).
 
 It uses [Controllers](https://kubernetes.io/docs/concepts/architecture/controller/) 
 which provides a reconcile function responsible for synchronizing resources until the desired state is reached. 
@@ -64,13 +67,13 @@ which provides a reconcile function responsible for synchronizing resources unti
 1. Install the required resources into kcp:
 
 ```sh
-make install
+KUBECONFIG=path/to/kcp.kubeconfig make install
 ```
 
 2. Run the operator (this will run in the foreground, so switch to a new terminal if you want to leave it running):
 
 ```sh
-make run ARGS="-v=6 --zap-log-level=6 --zap-devel=true --config=config/manager/controller_manager_config_test.yaml --api-export-name=settings-configuration.pipeline-service.io --api-export-workspace=<installation-ws>"
+KUBECONFIG=path/to/kcp.kubeconfig make run ARGS="-v=6 --zap-log-level=6 --zap-devel=true --config=config/manager/controller_manager_config_test.yaml --api-export-name=settings-configuration.pipeline-service.io --api-export-workspace=<installation-ws>"
 ```
 
 **NOTE:** You can also run this in one step by running: `make install run`
@@ -90,7 +93,7 @@ Here is an example of a launch configuration for VSCode
             "program": "${workspaceFolder}/main.go",
             "args": [
                 "--api-export-name", "settings-configuration.pipeline-service.io"
-                "--api-export-workspace","root:pipeline-service:management"
+                "--api-export-workspace","root:default:pipeline-service-compute"
                 "--config", "config/manager/controller_manager_config_test.yaml"
                 "--zap-log-level", "6"
                 "--zap-devel", "true"

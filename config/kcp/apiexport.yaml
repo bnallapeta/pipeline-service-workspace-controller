@@ -12,7 +12,7 @@ spec:
     resource: networkpolicies
     # identityHash needs to match the export of the workload cluster
     # it can be set with: make patch-identity 
-    identityHash: "a1171f89c2274572ac14ee99f6f733069ae14ce41db83ba550da58e8f4802b72"
+    identityHash: "5900449774469112c776a1e0dcc9987ebbb1c4ad50c0e742f524af393988dae0"
   - group: ""
     resource: "resourcequotas"
   - group: ""

@@ -170,7 +170,7 @@ func (r *SettingsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 	// Reverse claim should enforce that the quota cannot be changed by a workspace admin
 	// as long the workspace is bound to the apiexport of the controller
 	var wsQt corev1.ResourceQuota
-	wsQt.SetNamespace(r.CtrlConfig.Namespace)
+	wsQt.SetNamespace(r.CtrlConfig.QuotaConfig.Namespace)
 	wsQt.SetName(QtName)
 	wsQt.SetAnnotations(map[string]string{"experimental.quota.kcp.dev/cluster-scoped": "true"})
 	// Set the APIBinding instance as the owner and controller
@@ -190,7 +190,9 @@ func (r *SettingsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (c
 	// A single NetworkPolicy created in a single namespace defined in the operator configuration
 	// There is no enforcement, more a feature (hermetic build) than a constraint.
 	var wsNP netv1.NetworkPolicy
-	wsNP.SetNamespace(r.CtrlConfig.Namespace)
+	// commented this line which was setting the namespace value from controller_manager_config.yaml
+	//wsNP.SetNamespace(r.CtrlConfig.Namespace)
+	wsNP.SetNamespace(r.CtrlConfig.NetPolConfig.Namespace)
 	wsNP.SetName(NpName)
 	// Set the APIBinding instance as the owner and controller
 	ctrl.SetControllerReference(&ab, &wsNP, r.Scheme)
